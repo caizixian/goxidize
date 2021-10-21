@@ -4,5 +4,21 @@ version = "0.1.0"
 edition = "2018"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+path = "src/main.rs"
+name = "goxide"
 
 [dependencies]
+actix-web = "4.0.0-beta.10"
+sqlx = { version = "0.5", features = ["runtime-actix-rustls", "postgres", "macros", "uuid", "chrono", "migrate"] }
+config = { version = "0.11", default-features = false, features = ["yaml"] }
+serde = { version = "1.0", features = ["derive"] }
+
+[dev-dependencies]
+uuid = { version = "0.8", features = ["v4"] }
+tokio = { version = "1.12", features = ["macros", "sync", "rt"] }
+reqwest = { version = "0.11", features = ["json"] }
+actix-rt = "2.3"
