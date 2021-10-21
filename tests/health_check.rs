@@ -1,8 +1,8 @@
+use goxide::configuration::{get_configuration, DatabaseSettings};
+use goxide::startup::run;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use std::net::TcpListener;
 use uuid::Uuid;
-use goxide::configuration::{get_configuration, DatabaseSettings};
-use goxide::startup::run;
 
 pub struct TestApp {
     pub address: String,
