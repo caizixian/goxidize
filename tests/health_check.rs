@@ -16,7 +16,7 @@ async fn spawn_app() -> TestApp {
     let address = format!("http://127.0.0.1:{}", port);
 
     let mut configuration = get_configuration().expect("Failed to read configuration.");
-    configuration.database.database_name = Uuid::new_v4().to_string();
+    configuration.database.name = Uuid::new_v4().to_string();
     let connection_pool = configure_database(&configuration.database).await;
 
     let server = run(listener, connection_pool.clone()).expect("Failed to bind address");
@@ -33,7 +33,7 @@ pub async fn configure_database(config: &DatabaseSettings) -> PgPool {
         .await
         .expect("Failed to connect to Postgres");
     connection
-        .execute(&*format!(r#"CREATE DATABASE "{}";"#, config.database_name))
+        .execute(&*format!(r#"CREATE DATABASE "{}";"#, config.name))
         .await
         .expect("Failed to create database.");
 
