@@ -12,7 +12,7 @@ pub fn run(listener: TcpListener, db_pool: PgPool) -> Result<Server, std::io::Er
     let mut handlebars = Handlebars::new();
     handlebars.set_strict_mode(true);
     handlebars
-        .register_templates_directory(".html", "./static/templates")
+        .register_templates_directory(".hbs", "./static/templates")
         .unwrap();
     let handlebars_ref = web::Data::new(handlebars);
     let server = HttpServer::new(move || {
