@@ -1,5 +1,31 @@
 {{#> layout/base title="Goxide" }}
     {{#*inline "content"}}
-        <p>Hello world!</p>
+        <form action="/" method="post" class="col-4" >
+            <div class="mb-3">
+                <label for="path" class="form-label">Path</label>
+                <input type="text" class="form-control" id="path" name="path">
+            </div>
+            <div class="mb-3">
+                <label for="destination" class="form-label">Destination</label>
+                <input type="text" class="form-control" id="destination" name="destination">
+            </div>
+            <button type="submit" class="btn btn-primary">Add</button>
+        </form>
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th scope="col">Link</th>
+                <th scope="col">Destination</th>
+            </tr>
+            </thead>
+            <tbody>
+                {{#each links as |l|}}
+                    <tr>
+                        <td>{{l.path}}</td>
+                        <td>{{l.destination}}</td>
+                    </tr>
+                {{/each}}
+            </tbody>
+        </table>
     {{/inline}}
 {{/layout/base}}

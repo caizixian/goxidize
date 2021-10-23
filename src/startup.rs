@@ -18,6 +18,7 @@ pub fn run(listener: TcpListener, db_pool: PgPool) -> Result<Server, std::io::Er
     let server = HttpServer::new(move || {
         App::new()
             .route("/", web::get().to(index))
+            .route("/", web::post().to(index_post))
             .route("/health_check", web::get().to(health_check))
             .service(Files::new("/static", "static").prefer_utf8(true))
             .app_data(db_pool.clone())
