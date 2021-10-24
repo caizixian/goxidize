@@ -9,7 +9,8 @@ pub fn run(listener: TcpListener, db_pool: PgPool, _debug: bool) -> Result<Serve
     let db_pool = Data::new(db_pool);
     let server = HttpServer::new(move || {
         App::new()
-            .route("/health_check", web::get().to(health_check))
+            .service(web::scope("").configure(index_config))
+            .service(web::scope("/api/vi").configure(api_v1_config))
             .app_data(db_pool.clone())
     })
     .listen(listener)?
