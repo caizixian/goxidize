@@ -4,7 +4,7 @@ use sqlx::postgres::PgQueryResult;
 use sqlx::{query, query_as, PgPool};
 use uuid::Uuid;
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 pub struct LinkFormData {
     path: String,
     destination: String,
@@ -16,7 +16,7 @@ impl LinkFormData {
     }
 }
 
-#[derive(Serialize, Deserialize, sqlx::FromRow)]
+#[derive(Serialize, Deserialize, sqlx::FromRow, Debug)]
 pub struct Link {
     pub id: Uuid,
     pub path: String,

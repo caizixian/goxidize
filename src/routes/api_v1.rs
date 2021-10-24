@@ -4,11 +4,10 @@ use sqlx::PgPool;
 
 #[post("/link")]
 async fn new_link(link: web::Json<LinkFormData>, pg: web::Data<PgPool>) -> impl Responder {
-    let row = Link::from_form_data(link.into_inner())
-        .upsert(pg.get_ref())
-        .await;
+    let link = Link::from_form_data(link.into_inner());
+    let row = link.upsert(pg.get_ref()).await;
     if let Err(e) = row {
-        println!("{:?}", e);
+        error!("POST /link {:?} {:?}", link, e);
         return HttpResponse::InternalServerError().finish();
     }
     HttpResponse::Ok().finish()
