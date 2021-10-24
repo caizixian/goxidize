@@ -1,7 +1,7 @@
 /target
 /.idea
 /configuration.*
-/.proxyrc.json
+/.proxyrc.*
 
 ## https://github.com/github/gitignore/blob/master/Node.gitignore
 # Logs
