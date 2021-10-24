@@ -19,7 +19,8 @@ pub async fn spawn_app() -> TestApp {
     configuration.database.name = Uuid::new_v4().to_string();
     let connection_pool = configure_database(&configuration.database).await;
 
-    let server = run(listener, connection_pool.clone()).expect("Failed to bind address");
+    let server = run(listener, connection_pool.clone(), configuration.debug)
+        .expect("Failed to bind address");
     let _ = tokio::spawn(server);
     TestApp {
         address,

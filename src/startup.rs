@@ -7,10 +7,11 @@ use handlebars::Handlebars;
 use sqlx::PgPool;
 use std::net::TcpListener;
 
-pub fn run(listener: TcpListener, db_pool: PgPool) -> Result<Server, std::io::Error> {
+pub fn run(listener: TcpListener, db_pool: PgPool, debug: bool) -> Result<Server, std::io::Error> {
     let db_pool = Data::new(db_pool);
     let mut handlebars = Handlebars::new();
     handlebars.set_strict_mode(true);
+    handlebars.set_dev_mode(debug);
     handlebars
         .register_templates_directory(".hbs", "./static/templates")
         .unwrap();
