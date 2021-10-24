@@ -27,6 +27,6 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
         .set_default("debug", false)
         .expect("Failed to set the default value for debug");
     settings.merge(config::File::with_name("configuration").required(false))?;
-    settings.merge(config::Environment::new().prefix("goxide").separator("_"))?;
+    settings.merge(config::Environment::new().prefix("goxidize").separator("_"))?;
     settings.try_into()
 }

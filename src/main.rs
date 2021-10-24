@@ -1,5 +1,5 @@
-use goxide::configuration::get_configuration;
-use goxide::startup::run;
+use goxidize::configuration::get_configuration;
+use goxidize::startup::run;
 use sqlx::postgres::PgPool;
 use std::net::TcpListener;
 

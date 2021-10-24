@@ -1,5 +1,5 @@
-use goxide::configuration::{get_configuration, DatabaseSettings};
-use goxide::startup::run;
+use goxidize::configuration::{get_configuration, DatabaseSettings};
+use goxidize::startup::run;
 use sqlx::{Connection, Executor, PgConnection, PgPool};
 use std::net::TcpListener;
 use uuid::Uuid;
