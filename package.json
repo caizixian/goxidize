@@ -1,7 +1,8 @@
 {
   "name": "goxidize",
-  "version": "0.1.0",
+  "version": "0.1.0-alpha.1",
   "description": "A link shortener",
+  "license": "(MIT or Apache-2.0)",
   "private": true,
   "source": "src/frontend/index.html",
   "browserslist": "> 0.5%, last 2 versions, not dead",
