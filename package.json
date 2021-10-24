@@ -1,0 +1,18 @@
+{
+  "name": "goxide",
+  "version": "0.1.0",
+  "description": "A link shortener",
+  "main": "static/js/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/caizixian/goxide.git"
+  },
+  "author": "Zixian Cai",
+  "bugs": {
+    "url": "https://github.com/caizixian/goxide/issues"
+  },
+  "homepage": "https://github.com/caizixian/goxide",
+  "dependencies": {
+    "bootstrap": "^5.1.3"
+  }
+}
