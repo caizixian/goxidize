@@ -17,7 +17,7 @@ async fn main() -> std::io::Result<()> {
         .await
         .expect("Failed to migrate the database");
 
-    let address = format!("127.0.0.1:{}", configuration.port);
+    let address = format!("{}:{}", configuration.host, configuration.port);
     let listener = TcpListener::bind(address)?;
     run(listener, connection_pool, configuration.debug)?.await?;
     Ok(())

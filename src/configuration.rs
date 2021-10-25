@@ -1,6 +1,7 @@
 #[derive(serde::Deserialize)]
 pub struct Settings {
     pub database: DatabaseSettings,
+    pub host: String,
     pub port: u16,
     pub debug: bool,
 }
@@ -26,6 +27,9 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
     settings
         .set_default("debug", false)
         .expect("Failed to set the default value for debug");
+    settings
+        .set_default("host", "127.0.0.1")
+        .expect("Failed to set the default value for host");
     settings.merge(config::File::with_name("configuration").required(false))?;
     settings.merge(config::Environment::new().prefix("goxidize").separator("_"))?;
     settings.try_into()
