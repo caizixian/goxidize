@@ -58,4 +58,14 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormState> {
     }
 }
 
-ReactDOM.render(<LinkForm/>, document.getElementById('app'));
+class App extends React.Component {
+    render() {
+        return (
+            <div className="container">
+                <LinkForm/>
+            </div>
+        );
+    }
+}
+
+ReactDOM.render(<App/>, document.getElementById('app'));
