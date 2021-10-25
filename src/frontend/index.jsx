@@ -5,7 +5,8 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 class LinkForm extends React.Component {
     constructor(props) {
         super(props);
-        this.state = {path: '', destination: 'https://'};
+        this.initialState = {path: '', destination: 'https://'};
+        this.state = this.initialState;
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -28,7 +29,7 @@ class LinkForm extends React.Component {
                 body: JSON.stringify(this.state)
             };
             fetch('/api/v1/link', options)
-                .then(_ => this.setState({path: '', destination: 'https://'}));
+                .then(_ => this.setState(this.initialState));
         }
     }
 
