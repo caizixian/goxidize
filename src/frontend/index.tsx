@@ -1,18 +1,20 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import * as path from "path";
 
-type LinkFormProps = {};
-type LinkFormState = {
+type Link = {
     path: string,
     destination: string
 }
 
-class LinkForm extends React.Component<LinkFormProps, LinkFormState> {
-    private initialState = {path: '', destination: 'https://'};
-    state: LinkFormState;
+type Empty = Record<any, never>;
 
-    constructor(props: LinkFormProps) {
+class LinkForm extends React.Component<Empty, Link> {
+    private initialState = {path: '', destination: 'https://'};
+    state: Link;
+
+    constructor(props: Empty) {
         super(props);
         this.state = this.initialState;
         this.handleChange = this.handleChange.bind(this);
@@ -23,7 +25,7 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormState> {
         const {name, value} = event.currentTarget;
         this.setState({
             [name]: value
-        } as Pick<LinkFormState, keyof LinkFormState>);
+        } as Pick<Link, keyof Link>);
     };
 
     private readonly handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -58,11 +60,66 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormState> {
     }
 }
 
+type LinkTableState = {
+    links: Link[]
+}
+
+type LinkTableRowProp = {
+    link: Link
+}
+
+class LinkTableRow extends React.Component<LinkTableRowProp, Empty> {
+    constructor(props: LinkTableRowProp) {
+        super(props);
+    }
+
+    render() {
+        return (<tr>
+            <td><a href={'/' + this.props.link.path}>{'/' + this.props.link.path}</a></td>
+            <td><a href={this.props.link.destination}>{this.props.link.destination}</a></td>
+        </tr>);
+    }
+}
+
+class LinkTable extends React.Component<Empty, LinkTableState> {
+    constructor(props: Empty) {
+        super(props);
+        this.state = {links: []};
+    }
+
+    componentDidMount() {
+        fetch('/api/v1/link')
+            .then(response => response.json())
+            .then(
+                (result) => {
+                    this.setState({links: result});
+                },
+                (_error) => {
+                }
+            );
+    }
+
+    render() {
+        return (<table className="table">
+            <thead>
+            <tr>
+                <th scope="col">Link</th>
+                <th scope="col">Destination</th>
+            </tr>
+            </thead>
+            <tbody>
+            {this.state.links.map(link => <LinkTableRow link={link}/>)}
+            </tbody>
+        </table>);
+    }
+}
+
 class App extends React.Component {
     render() {
         return (
             <div className="container">
                 <LinkForm/>
+                <LinkTable/>
             </div>
         );
     }
