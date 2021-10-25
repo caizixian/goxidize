@@ -11,7 +11,7 @@ pub fn run(listener: TcpListener, db_pool: PgPool, debug: bool) -> Result<Server
     let db_pool = Data::new(db_pool);
     let server = HttpServer::new(move || {
         App::new()
-            .wrap(NormalizePath::new(TrailingSlash::MergeOnly))
+            .wrap(NormalizePath::new(TrailingSlash::Trim))
             .wrap(Logger::default())
             .service(web::scope("/api/v1").configure(api_v1_config))
             .configure(index_config)
