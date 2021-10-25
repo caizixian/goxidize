@@ -27,16 +27,6 @@ async fn redirect(params: web::Path<(String,)>, pg: web::Data<PgPool>) -> HttpRe
         .finish()
 }
 
-pub fn config(cfg: &mut web::ServiceConfig, debug: bool) {
+pub fn config(cfg: &mut web::ServiceConfig) {
     cfg.service(health_check).service(redirect);
-    if !debug {
-        cfg.route(
-            "/",
-            web::get().to(|| {
-                HttpResponse::MovedPermanently()
-                    .append_header((LOCATION, "/ui/"))
-                    .finish()
-            }),
-        );
-    }
 }

@@ -8,7 +8,7 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "start": "parcel --open",
-    "build": "cargo build --release && parcel build --public-url ./"
+    "build": "cargo build --release && parcel build --public-url /static --no-cache && rm -r .parcel-cache"
   },
   "repository": {
     "type": "git",

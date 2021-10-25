@@ -14,18 +14,13 @@ pub fn run(listener: TcpListener, db_pool: PgPool, debug: bool) -> Result<Server
             .wrap(NormalizePath::new(TrailingSlash::MergeOnly))
             .wrap(Logger::default())
             .service(web::scope("/api/v1").configure(api_v1_config))
+            .configure(index_config)
             .configure(|cfg| {
                 if !debug {
-                    cfg.service(
-                        Files::new("/ui", "./dist/")
-                            .index_file("index.html")
-                            .redirect_to_slash_directory(),
-                    );
+                    cfg.service(Files::new("/static", "./dist/"));
+                    cfg.service(Files::new("/", "./dist/").index_file("index.html"));
                 }
             })
-            // Needs to be the last
-            // Paths are resolved in the order they are defined
-            .service(web::scope("").configure(|cfg| index_config(cfg, debug)))
             .app_data(db_pool.clone())
     })
     .listen(listener)?
