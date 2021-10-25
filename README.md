@@ -14,8 +14,12 @@ Then, run the database migrations.
 ```bash
 sqlx migrate run
 ```
-
 This database is queried against for compile-time checks done by `sqlx`.
+
+If you don't have a database set up, `sqlx` will check against `sqlx-data.json`.
+To generate this file, run `cargo sqlx prepare -- --lib` and `cargo sqlx prepare --check -- --lib`.
+Note that you will still need a working database to run the tests.
+
 ### Development
 The Parcel development server supports auto-reloading for frontend assets.
 Use the following file to let the Parcel server proxy requests to the backend.

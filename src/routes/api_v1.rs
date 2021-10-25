@@ -1,7 +1,7 @@
 use crate::models::{Link, LinkFormData};
-use actix_web::{post, get, web, HttpResponse, Responder};
-use sqlx::PgPool;
+use actix_web::{get, post, web, HttpResponse, Responder};
 use serde_json::json;
+use sqlx::PgPool;
 
 #[post("/link")]
 async fn new_link(link: web::Json<LinkFormData>, pg: web::Data<PgPool>) -> impl Responder {
