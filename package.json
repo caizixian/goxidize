@@ -8,7 +8,10 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "start": "parcel --open",
-    "build": "cargo build --release && parcel build --public-url /static --no-cache && rm -r .parcel-cache"
+    "build": "cargo build --release && parcel build --public-url /static --no-cache && rm -r .parcel-cache",
+    "check": "tsc --noEmit && cargo check",
+    "test": "cargo test",
+    "lint": "cargo clippy"
   },
   "repository": {
     "type": "git",
@@ -25,7 +28,10 @@
     "react-dom": "^17.0.2"
   },
   "devDependencies": {
+    "@types/react": "^17.0.32",
+    "@types/react-dom": "^17.0.10",
     "http-proxy-middleware": "^2.0.1",
-    "parcel": "^2.0.0"
+    "parcel": "^2.0.0",
+    "typescript": "^4.4.4"
   }
 }
