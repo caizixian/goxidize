@@ -60,6 +60,40 @@ database:
 debug: true
 ```
 
+## Deployment
+An example of deployment using `docker-compose` is provided below.
+```yaml
+# docker-compose.yml
+version: '3'
+services:
+  db:
+    image: postgres:14
+    restart: always
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: goxidize
+      LANG: C.UTF-8
+    volumes:
+      - dbdata:/var/lib/postgresql/data
+  goxidize:
+    image: ghcr.io/caizixian/goxidize:master
+    restart: always
+    depends_on:
+      - "db"
+    ports:
+      - "8000:8000"
+    environment:
+      GOXIDIZE_HOST: "0.0.0.0"
+      GOXIDIZE_PORT: "8000"
+      GOXIDIZE_DATABASE_URL: "postgresql://postgres:password@db:5432"
+      GOXIDIZE_DATABASE_NAME: "goxidize"
+      GOXIDIZE_DEBUG: "false"
+
+volumes:
+  dbdata:
+```
+
 ## License
 Except as otherwise noted (e.g., in individual files), the project is
 licensed under the Apache License, Version 2.0 [LICENSE-APACHE](./LICENSE-APACHE) or
