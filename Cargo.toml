@@ -25,6 +25,6 @@ env_logger = "0.9"
 log = "0.4"
 
 [dev-dependencies]
-tokio = { version = "1.12", features = ["macros", "sync", "rt"] }
+tokio = { version = "1.13", features = ["macros", "sync", "rt"] }
 reqwest = { version = "0.11", features = ["json"] }
 actix-rt = "2.3"
