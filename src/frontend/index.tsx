@@ -1,20 +1,31 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import 'bootstrap/dist/css/bootstrap.min.css';
-import * as path from "path";
 
-type Link = {
+type LinkFormData = {
     path: string,
     destination: string
 }
 
+type Link = {
+    path: string,
+    destination: string,
+    id: string,
+    created_at: string,
+    modified_at: string
+}
+
 type Empty = Record<any, never>;
 
-class LinkForm extends React.Component<Empty, Link> {
-    private initialState = {path: '', destination: 'https://'};
-    state: Link;
+type LinkFormProps = {
+    loadTableData: () => void;
+};
 
-    constructor(props: Empty) {
+class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
+    private initialState = {path: '', destination: 'https://'};
+    state: LinkFormData;
+
+    constructor(props: LinkFormProps) {
         super(props);
         this.state = this.initialState;
         this.handleChange = this.handleChange.bind(this);
@@ -25,7 +36,7 @@ class LinkForm extends React.Component<Empty, Link> {
         const {name, value} = event.currentTarget;
         this.setState({
             [name]: value
-        } as Pick<Link, keyof Link>);
+        } as Pick<LinkFormData, keyof LinkFormData>);
     };
 
     private readonly handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -37,7 +48,10 @@ class LinkForm extends React.Component<Empty, Link> {
                 body: JSON.stringify(this.state)
             };
             fetch('/api/v1/link', options)
-                .then(_ => this.setState(this.initialState));
+                .then(_ => {
+                    this.props.loadTableData();
+                    this.setState(this.initialState);
+                });
         }
     }
 
@@ -60,10 +74,6 @@ class LinkForm extends React.Component<Empty, Link> {
     }
 }
 
-type LinkTableState = {
-    links: Link[]
-}
-
 type LinkTableRowProp = {
     link: Link
 }
@@ -81,13 +91,42 @@ class LinkTableRow extends React.Component<LinkTableRowProp, Empty> {
     }
 }
 
-class LinkTable extends React.Component<Empty, LinkTableState> {
+type LinkTableProps = {
+    links: Link[];
+};
+
+class LinkTable extends React.Component<LinkTableProps, Empty> {
+    render() {
+        return (<table className="table">
+            <thead>
+            <tr>
+                <th scope="col">Link</th>
+                <th scope="col">Destination</th>
+            </tr>
+            </thead>
+            <tbody>
+            {this.props.links.map(link => <LinkTableRow link={link} key={link.id}/>)}
+            </tbody>
+        </table>);
+    }
+}
+
+type AppState = {
+    links: Link[]
+}
+
+class App extends React.Component<Empty, AppState> {
     constructor(props: Empty) {
         super(props);
         this.state = {links: []};
+        this.loadTableData = this.loadTableData.bind(this);
     }
 
     componentDidMount() {
+        this.loadTableData()
+    }
+
+    loadTableData() {
         fetch('/api/v1/link')
             .then(response => response.json())
             .then(
@@ -100,26 +139,10 @@ class LinkTable extends React.Component<Empty, LinkTableState> {
     }
 
     render() {
-        return (<table className="table">
-            <thead>
-            <tr>
-                <th scope="col">Link</th>
-                <th scope="col">Destination</th>
-            </tr>
-            </thead>
-            <tbody>
-            {this.state.links.map(link => <LinkTableRow link={link}/>)}
-            </tbody>
-        </table>);
-    }
-}
-
-class App extends React.Component {
-    render() {
         return (
             <div className="container">
-                <LinkForm/>
-                <LinkTable/>
+                <LinkForm loadTableData={this.loadTableData}/>
+                <LinkTable links={this.state.links}/>
             </div>
         );
     }
