@@ -18,7 +18,7 @@ type Link = {
 type Empty = Record<any, never>;
 
 type LinkFormProps = {
-    loadTableData: () => void;
+    loadTableData: () => void
 };
 
 class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
@@ -75,24 +75,40 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
 }
 
 type LinkTableRowProp = {
-    link: Link
+    link: Link,
+    loadTableData: () => void
 }
 
 class LinkTableRow extends React.Component<LinkTableRowProp, Empty> {
     constructor(props: LinkTableRowProp) {
         super(props);
+        this.handleOnClick = this.handleOnClick.bind(this);
+    }
+
+    handleOnClick() {
+        const options = {
+            method: 'DELETE'
+        };
+        fetch(`/api/v1/link/${this.props.link.path}`, options)
+            .then(_ => {
+                this.props.loadTableData();
+            });
     }
 
     render() {
         return (<tr>
             <td><a href={'/' + this.props.link.path}>{'/' + this.props.link.path}</a></td>
             <td><a href={this.props.link.destination}>{this.props.link.destination}</a></td>
+            <td>
+                <button type="button" className="btn btn-danger" onClick={this.handleOnClick}>Delete</button>
+            </td>
         </tr>);
     }
 }
 
 type LinkTableProps = {
-    links: Link[];
+    links: Link[],
+    loadTableData: () => void
 };
 
 class LinkTable extends React.Component<LinkTableProps, Empty> {
@@ -102,10 +118,12 @@ class LinkTable extends React.Component<LinkTableProps, Empty> {
             <tr>
                 <th scope="col">Link</th>
                 <th scope="col">Destination</th>
+                <th scope="col">Delete</th>
             </tr>
             </thead>
             <tbody>
-            {this.props.links.map(link => <LinkTableRow link={link} key={link.id}/>)}
+            {this.props.links.map(link => <LinkTableRow link={link} key={link.id}
+                                                        loadTableData={this.props.loadTableData}/>)}
             </tbody>
         </table>);
     }
@@ -142,7 +160,7 @@ class App extends React.Component<Empty, AppState> {
         return (
             <div className="container">
                 <LinkForm loadTableData={this.loadTableData}/>
-                <LinkTable links={this.state.links}/>
+                <LinkTable links={this.state.links} loadTableData={this.loadTableData}/>
             </div>
         );
     }

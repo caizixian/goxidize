@@ -1,5 +1,5 @@
 use crate::models::{Link, LinkFormData};
-use actix_web::{get, post, web, HttpResponse, Responder};
+use actix_web::{delete, get, post, web, HttpResponse, Responder};
 use serde_json::json;
 use sqlx::PgPool;
 
@@ -24,6 +24,23 @@ async fn get_links(pg: web::Data<PgPool>) -> impl Responder {
     HttpResponse::Ok().json(json!(links.unwrap()))
 }
 
+#[delete("/link/{path}")]
+async fn delete_link(pg: web::Data<PgPool>, params: web::Path<(String,)>) -> impl Responder {
+    let (path,) = params.into_inner();
+    let result = Link::delete_by_path(&path, pg.get_ref()).await;
+    if let Err(e) = result {
+        error!("DELETE /link/{} {:?}", path, e);
+        return HttpResponse::InternalServerError().finish();
+    }
+    if result.unwrap().rows_affected() == 0 {
+        HttpResponse::NotFound().finish()
+    } else {
+        HttpResponse::Ok().finish()
+    }
+}
+
 pub fn config(cfg: &mut web::ServiceConfig) {
-    cfg.service(new_link).service(get_links);
+    cfg.service(new_link)
+        .service(get_links)
+        .service(delete_link);
 }
