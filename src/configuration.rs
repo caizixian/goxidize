@@ -6,7 +6,7 @@ pub struct Settings {
     pub debug: bool,
 }
 
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Clone)]
 pub struct DatabaseSettings {
     pub url: String,
     pub name: String,
@@ -20,6 +20,11 @@ impl DatabaseSettings {
     pub fn connection_string_without_db(&self) -> String {
         self.url.clone()
     }
+}
+
+lazy_static! {
+    pub static ref CONFIGURATION: Settings =
+        get_configuration().expect("Failed to read configuration.yml.");
 }
 
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
