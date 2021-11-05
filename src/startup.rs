@@ -1,7 +1,8 @@
 use crate::routes::*;
 use actix_files::Files;
 use actix_web::dev::Server;
-use actix_web::middleware::{Logger, NormalizePath, TrailingSlash};
+use actix_web::middleware::{NormalizePath, TrailingSlash};
+use tracing_actix_web::TracingLogger;
 use actix_web::web::Data;
 use actix_web::{web, App, HttpServer};
 use sqlx::PgPool;
@@ -12,7 +13,7 @@ pub fn run(listener: TcpListener, db_pool: PgPool, debug: bool) -> Result<Server
     let server = HttpServer::new(move || {
         App::new()
             .wrap(NormalizePath::new(TrailingSlash::Trim))
-            .wrap(Logger::default())
+            .wrap(TracingLogger::default())
             .service(web::scope("/api/v1").configure(api_v1_config))
             .configure(index_config)
             .configure(|cfg| {
