@@ -23,6 +23,9 @@ uuid = { version = "0.8", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 env_logger = "0.9"
 log = "0.4"
+tracing = { version = "0.1", features = ["log"] }
+tracing-opentelemetry = "0.16"
+tracing-actix-web = { version = "0.5.0-beta.1", features = ["opentelemetry_0_16"] }
 
 [dev-dependencies]
 tokio = { version = "1.13", features = ["macros", "sync", "rt"] }
