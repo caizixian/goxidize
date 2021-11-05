@@ -2,11 +2,11 @@ use crate::routes::*;
 use actix_files::Files;
 use actix_web::dev::Server;
 use actix_web::middleware::{NormalizePath, TrailingSlash};
-use tracing_actix_web::TracingLogger;
 use actix_web::web::Data;
 use actix_web::{web, App, HttpServer};
 use sqlx::PgPool;
 use std::net::TcpListener;
+use tracing_actix_web::TracingLogger;
 
 pub fn run(listener: TcpListener, db_pool: PgPool, debug: bool) -> Result<Server, std::io::Error> {
     let db_pool = Data::new(db_pool);
