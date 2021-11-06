@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgQueryResult;
 use sqlx::{query, query_as, PgPool};
 use uuid::Uuid;
+use tracing_futures::Instrument;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LinkFormData {
@@ -47,6 +48,7 @@ impl Link {
         "#
         )
         .fetch_all(pg)
+        .instrument(debug_span!("fetch_all query"))
         .await
     }
 
@@ -66,6 +68,7 @@ impl Link {
             self.modified_at
         )
         .execute(pg)
+        .instrument(debug_span!("upsert query"))
         .await
     }
 
@@ -81,6 +84,7 @@ impl Link {
             path
         )
         .fetch_one(pg)
+        .instrument(debug_span!("fetch_by_path query"))
         .await
     }
 
@@ -94,6 +98,7 @@ impl Link {
             path
         )
         .execute(pg)
+        .instrument(debug_span!("delete_by_path query"))
         .await
     }
 }

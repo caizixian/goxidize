@@ -28,7 +28,7 @@ tracing-futures = "0.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tracing-log = "0.1"
 lazy_static = "1.4"
-opentelemetry = "0.16"
+opentelemetry = { version = "0.16", features = ["rt-tokio-current-thread"] }
 opentelemetry-otlp = "0.9"
 
 [dev-dependencies]

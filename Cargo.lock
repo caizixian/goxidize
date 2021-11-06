@@ -1362,6 +1362,8 @@ dependencies = [
  "pin-project",
  "rand",
  "thiserror",
+ "tokio",
+ "tokio-stream",
 ]
 
 [[package]]
