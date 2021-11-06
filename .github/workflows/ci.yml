@@ -30,7 +30,6 @@ jobs:
   test:
     name: Test Suite
     runs-on: ubuntu-latest
-    container: "ubuntu:latest"
     services:
       postgres:
         image: postgres:14
@@ -99,7 +98,6 @@ jobs:
   coverage:
     name: Code coverage
     runs-on: ubuntu-latest
-    container: "ubuntu:latest"
     services:
       postgres:
         image: postgres:14
