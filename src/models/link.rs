@@ -6,8 +6,8 @@ use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LinkFormData {
-    path: String,
-    destination: String,
+    pub(crate) path: String,
+    pub(crate) destination: String,
 }
 
 impl LinkFormData {
@@ -37,6 +37,7 @@ impl Link {
         }
     }
 
+    #[instrument(skip(pg))]
     pub async fn fetch_all(pg: &PgPool) -> sqlx::Result<Vec<Link>> {
         query_as!(
             Link,
@@ -49,6 +50,7 @@ impl Link {
         .await
     }
 
+    #[instrument(skip(pg))]
     pub async fn upsert(&self, pg: &PgPool) -> sqlx::Result<PgQueryResult> {
         query!(
             r#"
@@ -67,6 +69,7 @@ impl Link {
         .await
     }
 
+    #[instrument(skip(pg))]
     pub async fn fetch_by_path(path: &str, pg: &PgPool) -> sqlx::Result<Link> {
         query_as!(
             Link,
@@ -81,6 +84,7 @@ impl Link {
         .await
     }
 
+    #[instrument(skip(pg))]
     pub async fn delete_by_path(path: &str, pg: &PgPool) -> sqlx::Result<PgQueryResult> {
         query!(
             r#"
