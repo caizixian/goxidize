@@ -83,15 +83,25 @@ services:
       - "db"
     ports:
       - "8000:8000"
-    environment:
-      GOXIDIZE_HOST: "0.0.0.0"
-      GOXIDIZE_PORT: "8000"
-      GOXIDIZE_DATABASE_URL: "postgresql://postgres:password@db:5432"
-      GOXIDIZE_DATABASE_NAME: "goxidize"
-      GOXIDIZE_DEBUG: "false"
+    # Using environment variables is another option 
+    volumes:
+      - "./goxidize_config.yml:/goxidize/configuration.yml"
 
 volumes:
   dbdata:
+```
+
+```yaml
+# goxidize_config.yml
+host: "0.0.0.0"
+port: 8000
+database:
+  host: db
+  port: 5432
+  username: postgres
+  password: password
+  name: goxidize
+debug: false
 ```
 
 ## License
