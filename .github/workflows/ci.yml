@@ -1,0 +1,151 @@
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+name: Continuous Integration
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  check:
+    name: Check
+    runs-on: ubuntu-latest
+    env:
+      SQLX_OFFLINE: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: check
+
+  test:
+    name: Test Suite
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: goxidize
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    env:
+      GOXIDIZE_PORT: "8000" # not used for test
+      GOXIDIZE_DEBUG: "true"
+      GOXIDIZE_DATABASE_HOST: "localhost"
+      GOXIDIZE_DATABASE_PORT: "5432"
+      GOXIDIZE_DATABASE_USERNAME: "postgres"
+      GOXIDIZE_DATABASE_PASSWORD: "password"
+      GOXIDIZE_DATABASE_NAME: "goxidize"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+      - uses: actions-rs/cargo@v1
+        with:
+          command: test
+
+  fmt:
+    name: Rustfmt
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: rustfmt
+      - uses: actions-rs/cargo@v1
+        with:
+          command: fmt
+          args: --all -- --check
+
+  clippy:
+    name: Clippy
+    runs-on: ubuntu-latest
+    env:
+      SQLX_OFFLINE: true
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: stable
+          override: true
+          components: clippy
+      - uses: actions-rs/clippy-check@v1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          args: -- -D warnings
+
+  coverage:
+    name: Code coverage
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:14
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: password
+          POSTGRES_DB: goxidize
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+        ports:
+          - 5432:5432
+    env:
+      GOXIDIZE_PORT: "8000" # not used for test
+      GOXIDIZE_DEBUG: "true"
+      GOXIDIZE_DATABASE_HOST: "localhost"
+      GOXIDIZE_DATABASE_PORT: "5432"
+      GOXIDIZE_DATABASE_USERNAME: "postgres"
+      GOXIDIZE_DATABASE_PASSWORD: "password"
+      GOXIDIZE_DATABASE_NAME: "goxidize"
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          override: true
+      - uses: actions-rs/tarpaulin@v0.1
+        with:
+          args: '--ignore-tests'
+          out-type: 'Html'
+      - uses: actions/upload-artifact@v2
+        with:
+          name: coverage-report-html
+          path: tarpaulin-report.html
+  frontend_test:
+    name: Frontend tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - run: npm install
+      - run: npx tsc --noEmit
