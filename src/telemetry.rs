@@ -25,7 +25,8 @@ pub fn get_otlp_tracer(configuration: &Settings) -> Option<Tracer> {
                 ),
             )])),
         )
-        .install_simple()
+        // https://github.com/open-telemetry/opentelemetry-rust/issues/536#issuecomment-840197611
+        .install_batch(opentelemetry::runtime::TokioCurrentThread)
         .expect("Failed to create an opentelemetry_otlp tracer");
     Some(tracer)
 }

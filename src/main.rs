@@ -37,5 +37,6 @@ async fn main() -> std::io::Result<()> {
     let address = format!("{}:{}", CONFIGURATION.host, CONFIGURATION.port);
     let listener = TcpListener::bind(address)?;
     run(listener, connection_pool, CONFIGURATION.debug)?.await?;
+    opentelemetry::global::shutdown_tracer_provider();
     Ok(())
 }
