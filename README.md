@@ -98,6 +98,8 @@ port: 8000
 database:
   host: db
   port: 5432
+  username: postgres
+  password: password
   name: goxidize
 debug: false
 ```
