@@ -24,7 +24,6 @@ impl DatabaseSettings {
     }
 
     pub fn options_without_db(&self) -> PgConnectOptions {
-        println!("{:?}", self);
         let options = PgConnectOptions::new()
             .host(&self.host)
             .port(self.port.parse().expect("Failed to parse port number"));
