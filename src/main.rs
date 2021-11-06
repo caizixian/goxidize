@@ -3,7 +3,9 @@ use goxidize::startup::run;
 use goxidize::telemetry::{get_otlp_tracer, get_subscriber, init_tracing};
 use lazy_static::lazy_static;
 use sqlx::postgres::PgPool;
+use sqlx::ConnectOptions;
 use std::net::TcpListener;
+use tracing::log::LevelFilter;
 use tracing_subscriber::layer::SubscriberExt;
 
 lazy_static! {
@@ -22,7 +24,9 @@ lazy_static! {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     lazy_static::initialize(&TRACING);
-    let connection_pool = PgPool::connect(&CONFIGURATION.database.connection_string())
+    let mut db_options = CONFIGURATION.database.options();
+    db_options.log_statements(LevelFilter::Debug);
+    let connection_pool = PgPool::connect_with(db_options)
         .await
         .expect("Failed to connect to Postgres.");
     sqlx::migrate!("./migrations")

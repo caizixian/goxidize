@@ -16,10 +16,12 @@ async fn new_link(link: web::Json<LinkFormData>, pg: web::Data<PgPool>) -> impl 
     let link = Link::from_form_data(link.into_inner());
     let row = link.upsert(pg.get_ref()).await;
     if let Err(e) = row {
-        error!("POST /link {:?} {:?}", link, e);
-        return HttpResponse::InternalServerError().finish();
+        error!("Failed to upsert a link {:?}", e);
+        HttpResponse::InternalServerError().finish()
+    } else {
+        info!("Successfully added a link");
+        HttpResponse::Ok().finish()
     }
-    HttpResponse::Ok().finish()
 }
 
 #[get("/link")]
@@ -28,7 +30,7 @@ async fn new_link(link: web::Json<LinkFormData>, pg: web::Data<PgPool>) -> impl 
 async fn get_links(pg: web::Data<PgPool>) -> impl Responder {
     let links = Link::fetch_all(pg.get_ref()).await;
     if let Err(e) = links {
-        error!("GET /link {:?}", e);
+        error!("Failed to fetch links {:?}", e);
         return HttpResponse::InternalServerError().finish();
     }
     HttpResponse::Ok().json(json!(links.unwrap()))
@@ -46,12 +48,14 @@ async fn delete_link(pg: web::Data<PgPool>, params: web::Path<(String,)>) -> imp
     let (path,) = params.into_inner();
     let result = Link::delete_by_path(&path, pg.get_ref()).await;
     if let Err(e) = result {
-        error!("DELETE /link/{} {:?}", path, e);
+        error!("Failed to delete a link {:?}", e);
         return HttpResponse::InternalServerError().finish();
     }
     if result.unwrap().rows_affected() == 0 {
+        info!("Attempted to delete a link, but not found");
         HttpResponse::NotFound().finish()
     } else {
+        info!("Successfully deleted a link");
         HttpResponse::Ok().finish()
     }
 }
