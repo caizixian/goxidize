@@ -1,12 +1,13 @@
-#[derive(serde::Deserialize)]
+#[derive(serde::Deserialize, Debug)]
 pub struct Settings {
     pub database: DatabaseSettings,
     pub host: String,
     pub port: u16,
     pub debug: bool,
+    pub otlpendpoint: String,
 }
 
-#[derive(serde::Deserialize, Clone)]
+#[derive(serde::Deserialize, Clone, Debug)]
 pub struct DatabaseSettings {
     pub url: String,
     pub name: String,
@@ -35,6 +36,9 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
     settings
         .set_default("host", "127.0.0.1")
         .expect("Failed to set the default value for host");
+    settings
+        .set_default("otlpendpoint", "")
+        .expect("Failed to set the default value for otlpendpoint");
     settings.merge(config::File::with_name("configuration").required(false))?;
     settings.merge(config::Environment::new().prefix("goxidize").separator("_"))?;
     settings.try_into()

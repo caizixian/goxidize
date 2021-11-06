@@ -1,8 +1,37 @@
 use crate::configuration::Settings;
+use opentelemetry::sdk::trace::{self, Tracer};
+use opentelemetry::sdk::Resource;
+use opentelemetry::KeyValue;
+use opentelemetry_otlp::WithExportConfig;
 use tracing::Subscriber;
 use tracing_log::LogTracer;
 use tracing_subscriber::registry::LookupSpan;
 use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
+
+pub fn get_otlp_tracer(configuration: &Settings) -> Option<Tracer> {
+    let end_point = &configuration.otlpendpoint;
+    if end_point.is_empty() {
+        return None;
+    }
+    let otlp_exporter = opentelemetry_otlp::new_exporter()
+        .tonic()
+        .with_endpoint(end_point);
+    let tracer = opentelemetry_otlp::new_pipeline()
+        .tracing()
+        .with_exporter(otlp_exporter)
+        .with_trace_config(
+            trace::config().with_resource(Resource::new(vec![KeyValue::new(
+                "service.name",
+                format!(
+                    "goxidize{}",
+                    if configuration.debug { "_debug" } else { "" }
+                ),
+            )])),
+        )
+        .install_simple()
+        .expect("Failed to create an opentelemetry_otlp tracer");
+    Some(tracer)
+}
 
 pub fn get_subscriber(
     configuration: &Settings,
