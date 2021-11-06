@@ -2,8 +2,8 @@ use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use sqlx::postgres::PgQueryResult;
 use sqlx::{query, query_as, PgPool};
-use uuid::Uuid;
 use tracing_futures::Instrument;
+use uuid::Uuid;
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct LinkFormData {
