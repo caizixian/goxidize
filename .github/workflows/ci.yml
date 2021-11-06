@@ -42,10 +42,12 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 5432:5432
     env:
       GOXIDIZE_PORT: "8000" # not used for test
       GOXIDIZE_DEBUG: "true"
-      GOXIDIZE_DATABASE_HOST: "postgres"
+      GOXIDIZE_DATABASE_HOST: "localhost"
       GOXIDIZE_DATABASE_PORT: "5432"
       GOXIDIZE_DATABASE_USERNAME: "postgres"
       GOXIDIZE_DATABASE_PASSWORD: "password"
@@ -110,10 +112,12 @@ jobs:
           --health-interval 10s
           --health-timeout 5s
           --health-retries 5
+        ports:
+          - 5432:5432
     env:
       GOXIDIZE_PORT: "8000" # not used for test
       GOXIDIZE_DEBUG: "true"
-      GOXIDIZE_DATABASE_HOST: "postgres"
+      GOXIDIZE_DATABASE_HOST: "localhost"
       GOXIDIZE_DATABASE_PORT: "5432"
       GOXIDIZE_DATABASE_USERNAME: "postgres"
       GOXIDIZE_DATABASE_PASSWORD: "password"
