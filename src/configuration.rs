@@ -1,3 +1,5 @@
+use sqlx::postgres::PgConnectOptions;
+
 #[derive(serde::Deserialize, Debug)]
 pub struct Settings {
     pub database: DatabaseSettings,
@@ -9,17 +11,20 @@ pub struct Settings {
 
 #[derive(serde::Deserialize, Clone, Debug)]
 pub struct DatabaseSettings {
-    pub url: String,
+    pub port: String,
+    pub host: String,
     pub name: String,
 }
 
 impl DatabaseSettings {
-    pub fn connection_string(&self) -> String {
-        format!("{}/{}", self.url, self.name)
+    pub fn options(&self) -> PgConnectOptions {
+        self.options_without_db().database(&self.name)
     }
 
-    pub fn connection_string_without_db(&self) -> String {
-        self.url.clone()
+    pub fn options_without_db(&self) -> PgConnectOptions {
+        PgConnectOptions::new()
+            .host(&self.host)
+            .port(self.port.parse().expect("Failed to parse port number"))
     }
 }
 
