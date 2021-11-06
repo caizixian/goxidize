@@ -6,7 +6,7 @@ pub struct Settings {
     pub host: String,
     pub port: u16,
     pub debug: bool,
-    pub otlpendpoint: String,
+    pub otlpendpoint: Option<String>,
 }
 
 #[derive(serde::Deserialize, Clone, Debug)]
@@ -14,6 +14,8 @@ pub struct DatabaseSettings {
     pub port: String,
     pub host: String,
     pub name: String,
+    pub username: Option<String>,
+    pub password: Option<String>,
 }
 
 impl DatabaseSettings {
@@ -22,9 +24,19 @@ impl DatabaseSettings {
     }
 
     pub fn options_without_db(&self) -> PgConnectOptions {
-        PgConnectOptions::new()
+        println!("{:?}", self);
+        let options = PgConnectOptions::new()
             .host(&self.host)
-            .port(self.port.parse().expect("Failed to parse port number"))
+            .port(self.port.parse().expect("Failed to parse port number"));
+        if let Some(ref username) = self.username {
+            let password = self
+                .password
+                .as_ref()
+                .expect("Password expected when a username is set");
+            options.username(username).password(password)
+        } else {
+            options
+        }
     }
 }
 
@@ -41,9 +53,6 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
     settings
         .set_default("host", "127.0.0.1")
         .expect("Failed to set the default value for host");
-    settings
-        .set_default("otlpendpoint", "")
-        .expect("Failed to set the default value for otlpendpoint");
     settings.merge(config::File::with_name("configuration").required(false))?;
     settings.merge(config::Environment::new().prefix("goxidize").separator("_"))?;
     settings.try_into()

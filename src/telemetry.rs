@@ -9,10 +9,7 @@ use tracing_subscriber::registry::LookupSpan;
 use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 
 pub fn get_otlp_tracer(configuration: &Settings) -> Option<Tracer> {
-    let end_point = &configuration.otlpendpoint;
-    if end_point.is_empty() {
-        return None;
-    }
+    let end_point = configuration.otlpendpoint.as_ref()?;
     let otlp_exporter = opentelemetry_otlp::new_exporter()
         .tonic()
         .with_endpoint(end_point);
