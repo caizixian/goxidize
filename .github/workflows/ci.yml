@@ -136,3 +136,16 @@ jobs:
         with:
           name: coverage-report-html
           path: tarpaulin-report.html
+  frontend_test:
+    name: Frontend tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Set up Node
+        uses: actions/setup-node@v2
+        with:
+          node-version: '16'
+          cache: 'npm'
+      - run: npm install
+      - run: npx tsc --noEmit
