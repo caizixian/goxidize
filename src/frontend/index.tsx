@@ -57,18 +57,24 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
 
     render() {
         return (
-            <form onSubmit={this.handleSubmit} className="col-4">
-                <div className="form-group">
-                    <label htmlFor="path">Path</label>
-                    <input type="text" className="form-control" id="path" name="path" value={this.state.path}
+            <form onSubmit={this.handleSubmit} className="row align-items-center">
+                <label htmlFor="path" className="col-form-label col-3 col-lg-1">Path</label>
+                <div className="col-9 col-lg-4">
+                    <input type="text" className="form-control m-1" id="path" name="path" value={this.state.path}
                            placeholder="Enter path" onChange={this.handleChange}/>
                 </div>
-                <div className="form-group">
-                    <label htmlFor="destination">Destination</label>
-                    <input type="text" className="form-control" id="destination" name="destination"
-                           value={this.state.destination} placeholder="Enter destination" onChange={this.handleChange}/>
+                <label htmlFor="destination" className="col-form-label col-3 col-lg-1">Destination</label>
+                <div className="col-9 col-lg-4">
+                    <input type="text" className="form-control m-1" id="destination" name="destination"
+                           value={this.state.destination} placeholder="Enter destination"
+                           onChange={this.handleChange}/>
                 </div>
-                <button type="submit" className="btn btn-primary">Submit</button>
+                <div className="col-6 col-lg-1 text-center">
+                    <button type="submit" className="btn btn-primary m-1">Submit</button>
+                </div>
+                <div className="col-6 col-lg-1 text-center">
+                    <button className="btn btn-primary m-1">Undo</button>
+                </div>
             </form>
         );
     }
@@ -96,10 +102,12 @@ class LinkTableRow extends React.Component<LinkTableRowProp, Empty> {
     }
 
     render() {
-        return (<tr>
-            <td><a href={'/' + this.props.link.path}>{'/' + this.props.link.path}</a></td>
-            <td><a href={this.props.link.destination}>{this.props.link.destination}</a></td>
-            <td>
+        return (<tr className="row">
+            <td className="col-2 col-lg-1 text-truncate"><a
+                href={'/' + this.props.link.path}>{'/' + this.props.link.path}</a></td>
+            <td className="col-8 col-lg-10 text-truncate"><a
+                href={this.props.link.destination}>{this.props.link.destination}</a></td>
+            <td className="col-2 col-lg-1 text-center">
                 <button type="button" className="btn btn-danger" onClick={this.handleOnClick}>Delete</button>
             </td>
         </tr>);
@@ -113,12 +121,12 @@ type LinkTableProps = {
 
 class LinkTable extends React.Component<LinkTableProps, Empty> {
     render() {
-        return (<table className="table">
+        return (<table className="table row">
             <thead>
-            <tr>
-                <th scope="col">Link</th>
-                <th scope="col">Destination</th>
-                <th scope="col">Delete</th>
+            <tr className="row">
+                <th className="col-2 col-lg-1" scope="col">Link</th>
+                <th className="col-8 col-lg-10" scope="col">Destination</th>
+                <th className="col-2 col-lg-1" scope="col">Delete</th>
             </tr>
             </thead>
             <tbody>
@@ -130,13 +138,14 @@ class LinkTable extends React.Component<LinkTableProps, Empty> {
 }
 
 type AppState = {
-    links: Link[]
+    links: Link[],
+    undoStack: Link[]
 }
 
 class App extends React.Component<Empty, AppState> {
     constructor(props: Empty) {
         super(props);
-        this.state = {links: []};
+        this.state = {links: [], undoStack: []};
         this.loadTableData = this.loadTableData.bind(this);
     }
 
