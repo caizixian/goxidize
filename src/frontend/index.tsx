@@ -18,7 +18,9 @@ type Link = {
 type Empty = Record<any, never>;
 
 type LinkFormProps = {
-    loadTableData: () => void
+    loadTableData: () => void,
+    popUndoStack: () => void,
+    undoStack: Link[],
 };
 
 class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
@@ -30,6 +32,7 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
         this.state = this.initialState;
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.handleUndo = this.handleUndo.bind(this);
     }
 
     private readonly handleChange = (event: React.FormEvent<HTMLInputElement>) => {
@@ -55,6 +58,23 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
         }
     }
 
+    private readonly handleUndo = (event: React.FormEvent<HTMLButtonElement>) => {
+        event.preventDefault();
+        let link = this.props.undoStack[this.props.undoStack.length - 1];
+        if (link !== null) {
+            const options = {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({"path": link.path, "destination": link.destination})
+            };
+            fetch('/api/v1/link', options)
+                .then(_ => {
+                    this.props.popUndoStack();
+                    this.props.loadTableData();
+                });
+        }
+    }
+
     render() {
         return (
             <form onSubmit={this.handleSubmit} className="row align-items-center">
@@ -72,8 +92,10 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
                 <div className="col-6 col-lg-1 text-center">
                     <button type="submit" className="btn btn-primary m-1">Submit</button>
                 </div>
+
                 <div className="col-6 col-lg-1 text-center">
-                    <button className="btn btn-primary m-1">Undo</button>
+                    {this.props.undoStack.length > 0 &&
+                    <button className="btn btn-primary m-1" onClick={this.handleUndo}>Undo</button>}
                 </div>
             </form>
         );
@@ -82,7 +104,8 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
 
 type LinkTableRowProp = {
     link: Link,
-    loadTableData: () => void
+    loadTableData: () => void,
+    pushUndoStack: (link: Link) => void
 }
 
 class LinkTableRow extends React.Component<LinkTableRowProp, Empty> {
@@ -97,6 +120,7 @@ class LinkTableRow extends React.Component<LinkTableRowProp, Empty> {
         };
         fetch(`/api/v1/link/${this.props.link.path}`, options)
             .then(_ => {
+                this.props.pushUndoStack(this.props.link);
                 this.props.loadTableData();
             });
     }
@@ -116,7 +140,8 @@ class LinkTableRow extends React.Component<LinkTableRowProp, Empty> {
 
 type LinkTableProps = {
     links: Link[],
-    loadTableData: () => void
+    loadTableData: () => void,
+    pushUndoStack: (link: Link) => void
 };
 
 class LinkTable extends React.Component<LinkTableProps, Empty> {
@@ -131,7 +156,8 @@ class LinkTable extends React.Component<LinkTableProps, Empty> {
             </thead>
             <tbody>
             {this.props.links.map(link => <LinkTableRow link={link} key={link.id}
-                                                        loadTableData={this.props.loadTableData}/>)}
+                                                        loadTableData={this.props.loadTableData}
+                                                        pushUndoStack={this.props.pushUndoStack}/>)}
             </tbody>
         </table>);
     }
@@ -147,6 +173,8 @@ class App extends React.Component<Empty, AppState> {
         super(props);
         this.state = {links: [], undoStack: []};
         this.loadTableData = this.loadTableData.bind(this);
+        this.popUndoStack = this.popUndoStack.bind(this);
+        this.pushUndoStack = this.pushUndoStack.bind(this);
     }
 
     componentDidMount() {
@@ -165,11 +193,21 @@ class App extends React.Component<Empty, AppState> {
             );
     }
 
+    pushUndoStack(link: Link) {
+        this.setState((state) => ({undoStack: state.undoStack.concat(link)}));
+    }
+
+    popUndoStack() {
+        this.setState((state) => ({undoStack: state.undoStack.slice(0, -1)}));
+    }
+
     render() {
         return (
             <div className="container">
-                <LinkForm loadTableData={this.loadTableData}/>
-                <LinkTable links={this.state.links} loadTableData={this.loadTableData}/>
+                <LinkForm undoStack={this.state.undoStack} popUndoStack={this.popUndoStack}
+                          loadTableData={this.loadTableData}/>
+                <LinkTable links={this.state.links} loadTableData={this.loadTableData}
+                           pushUndoStack={this.pushUndoStack}/>
             </div>
         );
     }
