@@ -21,7 +21,7 @@ lazy_static! {
     };
 }
 
-#[actix_web::main]
+#[tokio::main]
 async fn main() -> std::io::Result<()> {
     lazy_static::initialize(&TRACING);
     let mut db_options = CONFIGURATION.database.options();

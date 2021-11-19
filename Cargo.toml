@@ -1,6 +1,6 @@
 [package]
 name = "goxidize"
-version = "0.1.0-beta.2"
+version = "0.1.0-beta.3"
 edition = "2021"
 license = "MIT OR Apache-2.0"
 description = "A link shortener"
@@ -19,7 +19,7 @@ path = "src/main.rs"
 name = "goxidize"
 
 [dependencies]
-actix-web = "4.0.0-beta.10"
+actix-web = "4.0.0-beta.11"
 actix-files = "0.6.0-beta.8"
 sqlx = { version = "0.5", features = ["runtime-actix-rustls", "postgres", "uuid", "chrono", "offline"] }
 config = { version = "0.11", default-features = false, features = ["yaml"] }
@@ -29,15 +29,15 @@ uuid = { version = "0.8", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 tracing = { version = "0.1", features = ["log"] }
 tracing-opentelemetry = "0.16"
-tracing-actix-web = { version = "0.5.0-beta.1", features = ["opentelemetry_0_16"] }
+tracing-actix-web = { version = "0.5.0-beta.2", features = ["opentelemetry_0_16"] }
 tracing-futures = "0.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tracing-log = "0.1"
 lazy_static = "1.4"
 opentelemetry = { version = "0.16", features = ["rt-tokio-current-thread"] }
 opentelemetry-otlp = "0.9"
+tokio = { version = "1.14", features = ["macros", "sync", "rt"] }
 
 [dev-dependencies]
-tokio = { version = "1.14", features = ["macros", "sync", "rt"] }
 reqwest = { version = "0.11", features = ["json"] }
 actix-rt = "2.4"
