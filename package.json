@@ -1,6 +1,6 @@
 {
   "name": "goxidize",
-  "version": "0.1.0-beta.4",
+  "version": "0.1.0",
   "description": "A link shortener",
   "license": "(MIT or Apache-2.0)",
   "private": true,

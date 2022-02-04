@@ -803,7 +803,7 @@ dependencies = [
 
 [[package]]
 name = "goxidize"
-version = "0.1.0-beta.4"
+version = "0.1.0"
 dependencies = [
  "actix-files",
  "actix-web",
