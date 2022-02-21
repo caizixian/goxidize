@@ -45,14 +45,11 @@ lazy_static! {
 }
 
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
-    let mut settings = config::Config::default();
-    settings
-        .set_default("debug", false)
-        .expect("Failed to set the default value for debug");
-    settings
-        .set_default("host", "localhost")
-        .expect("Failed to set the default value for host");
-    settings.merge(config::File::with_name("configuration").required(false))?;
-    settings.merge(config::Environment::new().prefix("goxidize").separator("_"))?;
-    settings.try_into()
+    let config = config::Config::builder()
+        .set_default("debug", false)?
+        .set_default("host", "localhost")?
+        .add_source(config::File::with_name("configuration").required(false))
+        .add_source(config::Environment::default().prefix("goxidize").separator("_"))
+        .build()?;
+    config.try_deserialize()
 }
