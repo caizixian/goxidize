@@ -49,7 +49,11 @@ pub fn get_configuration() -> Result<Settings, config::ConfigError> {
         .set_default("debug", false)?
         .set_default("host", "localhost")?
         .add_source(config::File::with_name("configuration").required(false))
-        .add_source(config::Environment::default().prefix("goxidize").separator("_"))
+        .add_source(
+            config::Environment::default()
+                .prefix("goxidize")
+                .separator("_"),
+        )
         .build()?;
     config.try_deserialize()
 }
