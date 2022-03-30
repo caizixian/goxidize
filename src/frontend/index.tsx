@@ -1,5 +1,6 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
+import {createRoot} from "react-dom/client";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 type LinkFormData = {
@@ -95,7 +96,7 @@ class LinkForm extends React.Component<LinkFormProps, LinkFormData> {
 
                 <div className="col-6 col-lg-1 text-center">
                     {this.props.undoStack.length > 0 &&
-                    <button className="btn btn-primary m-1" onClick={this.handleUndo}>Undo</button>}
+                        <button className="btn btn-primary m-1" onClick={this.handleUndo}>Undo</button>}
                 </div>
             </form>
         );
@@ -213,4 +214,8 @@ class App extends React.Component<Empty, AppState> {
     }
 }
 
-ReactDOM.render(<App/>, document.getElementById('app'));
+const container = document.getElementById('app') as HTMLInputElement;
+const root = createRoot(container);
+root.render(
+    <React.StrictMode><App /></React.StrictMode>
+);
