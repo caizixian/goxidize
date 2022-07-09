@@ -146,7 +146,7 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@v3.3.0
         with:
-          node-version: '16'
+          node-version: 'lts/*'
           cache: 'npm'
       - run: npm install
       - run: npx tsc --noEmit
