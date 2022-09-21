@@ -23,6 +23,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - run: sudo apt-get install -y protobuf-compiler
       - uses: actions-rs/cargo@v1
         with:
           command: check
@@ -59,6 +60,7 @@ jobs:
           profile: minimal
           toolchain: stable
           override: true
+      - run: sudo apt-get install -y protobuf-compiler
       - uses: actions-rs/cargo@v1
         with:
           command: test
@@ -74,6 +76,7 @@ jobs:
           toolchain: stable
           override: true
           components: rustfmt
+      - run: sudo apt-get install -y protobuf-compiler
       - uses: actions-rs/cargo@v1
         with:
           command: fmt
@@ -92,6 +95,7 @@ jobs:
           toolchain: stable
           override: true
           components: clippy
+      - run: sudo apt-get install -y protobuf-compiler
       - uses: actions-rs/clippy-check@v1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
@@ -128,6 +132,7 @@ jobs:
         with:
           toolchain: stable
           override: true
+      - run: sudo apt-get install -y protobuf-compiler
       - uses: actions-rs/tarpaulin@v0.1
         with:
           args: '--ignore-tests'
