@@ -25,7 +25,7 @@ sqlx = { version = "0.6", features = ["runtime-actix-rustls", "postgres", "uuid"
 config = { version = "0.13", default-features = false, features = ["yaml"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
-uuid = { version = "1.0", features = ["v4", "serde"] }
+uuid = { version = "1.2", features = ["v4", "serde"] }
 chrono = { version = "0.4", features = ["serde"] }
 tracing = { version = "0.1", features = ["log"] }
 tracing-opentelemetry = "0.18"
