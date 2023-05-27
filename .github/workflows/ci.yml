@@ -18,13 +18,13 @@ jobs:
       SQLX_OFFLINE: true
     steps:
       - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - uses: caizixian/toolchain@v1.0.7
         with:
           profile: minimal
           toolchain: stable
           override: true
       - run: sudo apt-get install -y protobuf-compiler
-      - uses: actions-rs/cargo@v1
+      - uses: caizixian/cargo@v1.0.3
         with:
           command: check
 
@@ -55,13 +55,13 @@ jobs:
       GOXIDIZE_DATABASE_NAME: "goxidize"
     steps:
       - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - uses: caizixian/toolchain@v1.0.7
         with:
           profile: minimal
           toolchain: stable
           override: true
       - run: sudo apt-get install -y protobuf-compiler
-      - uses: actions-rs/cargo@v1
+      - uses: caizixian/cargo@v1.0.3
         with:
           command: test
 
@@ -70,14 +70,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - uses: caizixian/toolchain@v1.0.7
         with:
           profile: minimal
           toolchain: stable
           override: true
           components: rustfmt
       - run: sudo apt-get install -y protobuf-compiler
-      - uses: actions-rs/cargo@v1
+      - uses: caizixian/cargo@v1.0.3
         with:
           command: fmt
           args: --all -- --check
@@ -89,14 +89,14 @@ jobs:
       SQLX_OFFLINE: true
     steps:
       - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - uses: caizixian/toolchain@v1.0.7
         with:
           profile: minimal
           toolchain: stable
           override: true
           components: clippy
       - run: sudo apt-get install -y protobuf-compiler
-      - uses: actions-rs/clippy-check@v1
+      - uses: caizixian/clippy-check@v1.0.7
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           args: -- -D warnings
@@ -128,12 +128,12 @@ jobs:
       GOXIDIZE_DATABASE_NAME: "goxidize"
     steps:
       - uses: actions/checkout@v3
-      - uses: actions-rs/toolchain@v1
+      - uses: caizixian/toolchain@v1.0.7
         with:
           toolchain: stable
           override: true
       - run: sudo apt-get install -y protobuf-compiler
-      - uses: actions-rs/tarpaulin@v0.1
+      - uses: caizixian/tarpaulin@v0.1.4
         with:
           args: '--ignore-tests'
           out-type: 'Html'
