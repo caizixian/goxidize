@@ -25,7 +25,7 @@ jobs:
         with:
           node-version: 'lts/*'
           cache: 'npm'
-      - uses: caizixian/toolchain@v1.0.7
+      - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
           toolchain: stable

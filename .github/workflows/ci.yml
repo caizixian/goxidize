@@ -18,13 +18,13 @@ jobs:
       SQLX_OFFLINE: true
     steps:
       - uses: actions/checkout@v3
-      - uses: caizixian/toolchain@v1.0.7
+      - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
           toolchain: stable
           override: true
       - run: sudo apt-get install -y protobuf-compiler
-      - uses: caizixian/cargo@v1.0.3
+      - uses: caizixian/cargo@v1.0.4
         with:
           command: check
 
@@ -55,13 +55,13 @@ jobs:
       GOXIDIZE_DATABASE_NAME: "goxidize"
     steps:
       - uses: actions/checkout@v3
-      - uses: caizixian/toolchain@v1.0.7
+      - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
           toolchain: stable
           override: true
       - run: sudo apt-get install -y protobuf-compiler
-      - uses: caizixian/cargo@v1.0.3
+      - uses: caizixian/cargo@v1.0.4
         with:
           command: test
 
@@ -70,14 +70,14 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: caizixian/toolchain@v1.0.7
+      - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
           toolchain: stable
           override: true
           components: rustfmt
       - run: sudo apt-get install -y protobuf-compiler
-      - uses: caizixian/cargo@v1.0.3
+      - uses: caizixian/cargo@v1.0.4
         with:
           command: fmt
           args: --all -- --check
@@ -89,7 +89,7 @@ jobs:
       SQLX_OFFLINE: true
     steps:
       - uses: actions/checkout@v3
-      - uses: caizixian/toolchain@v1.0.7
+      - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
           toolchain: stable
@@ -128,7 +128,7 @@ jobs:
       GOXIDIZE_DATABASE_NAME: "goxidize"
     steps:
       - uses: actions/checkout@v3
-      - uses: caizixian/toolchain@v1.0.7
+      - uses: caizixian/toolchain@v1.0.8
         with:
           toolchain: stable
           override: true
