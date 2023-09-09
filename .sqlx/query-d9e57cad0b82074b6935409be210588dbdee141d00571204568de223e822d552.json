@@ -1,0 +1,18 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        INSERT INTO links (id, path, destination, created_at, modified_at)\n        VALUES ($1, $2, $3, $4, $5)\n        ON CONFLICT (path) DO UPDATE\n        SET destination = EXCLUDED.destination, modified_at = EXCLUDED.modified_at\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Uuid",
+        "Text",
+        "Text",
+        "Timestamptz",
+        "Timestamptz"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d9e57cad0b82074b6935409be210588dbdee141d00571204568de223e822d552"
+}

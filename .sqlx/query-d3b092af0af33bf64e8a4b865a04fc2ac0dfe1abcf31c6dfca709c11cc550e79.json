@@ -1,0 +1,14 @@
+{
+  "db_name": "PostgreSQL",
+  "query": "\n        DELETE FROM links\n        WHERE path = $1\n        ",
+  "describe": {
+    "columns": [],
+    "parameters": {
+      "Left": [
+        "Text"
+      ]
+    },
+    "nullable": []
+  },
+  "hash": "d3b092af0af33bf64e8a4b865a04fc2ac0dfe1abcf31c6dfca709c11cc550e79"
+}

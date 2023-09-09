@@ -24,8 +24,10 @@ lazy_static! {
 #[tokio::main]
 async fn main() -> std::io::Result<()> {
     lazy_static::initialize(&TRACING);
-    let mut db_options = CONFIGURATION.database.options();
-    db_options.log_statements(LevelFilter::Debug);
+    let db_options = CONFIGURATION
+        .database
+        .options()
+        .log_statements(LevelFilter::Debug);
     let connection_pool = PgPool::connect_with(db_options)
         .await
         .expect("Failed to connect to Postgres.");
