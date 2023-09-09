@@ -17,7 +17,7 @@ jobs:
     env:
       SQLX_OFFLINE: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
@@ -54,7 +54,7 @@ jobs:
       GOXIDIZE_DATABASE_PASSWORD: "password"
       GOXIDIZE_DATABASE_NAME: "goxidize"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
@@ -69,7 +69,7 @@ jobs:
     name: Rustfmt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
@@ -88,7 +88,7 @@ jobs:
     env:
       SQLX_OFFLINE: true
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: caizixian/toolchain@v1.0.8
         with:
           profile: minimal
@@ -127,7 +127,7 @@ jobs:
       GOXIDIZE_DATABASE_PASSWORD: "password"
       GOXIDIZE_DATABASE_NAME: "goxidize"
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - uses: caizixian/toolchain@v1.0.8
         with:
           toolchain: stable
@@ -147,7 +147,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
       - name: Set up Node
         uses: actions/setup-node@v3.7.0
         with:
