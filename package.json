@@ -31,7 +31,7 @@
     "@types/react": "^18.2.36",
     "@types/react-dom": "^18.2.14",
     "http-proxy-middleware": "^2.0.6",
-    "parcel": "^2.10.2",
+    "parcel": "^2.10.3",
     "typescript": "^5.2.2"
   }
 }
