@@ -137,7 +137,7 @@ jobs:
         with:
           args: '--ignore-tests'
           out-type: 'html'
-      - uses: actions/upload-artifact@v3
+      - uses: actions/upload-artifact@v4
         with:
           name: coverage-report-html
           path: tarpaulin-report.html
