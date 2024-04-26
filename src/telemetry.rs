@@ -1,8 +1,8 @@
 use crate::configuration::Settings;
-use opentelemetry::sdk::trace::{self, Tracer};
-use opentelemetry::sdk::Resource;
 use opentelemetry::KeyValue;
 use opentelemetry_otlp::WithExportConfig;
+use opentelemetry_sdk::trace::{self, Tracer};
+use opentelemetry_sdk::Resource;
 use tracing::Subscriber;
 use tracing_log::LogTracer;
 use tracing_subscriber::registry::LookupSpan;
@@ -26,7 +26,7 @@ pub fn get_otlp_tracer(configuration: &Settings) -> Option<Tracer> {
             )])),
         )
         // https://github.com/open-telemetry/opentelemetry-rust/issues/536#issuecomment-840197611
-        .install_batch(opentelemetry::runtime::TokioCurrentThread)
+        .install_batch(opentelemetry_sdk::runtime::TokioCurrentThread)
         .expect("Failed to create an opentelemetry_otlp tracer");
     Some(tracer)
 }
