@@ -33,7 +33,7 @@ tracing-actix-web = { version = "0.7.11", features = ["opentelemetry_0_23"] }
 tracing-futures = "0.2"
 tracing-subscriber = { version = "0.3", features = ["env-filter"] }
 tracing-log = "0.2"
-lazy_static = "1.4"
+lazy_static = "1.5"
 opentelemetry = "0.23"
 opentelemetry_sdk = { version = "0.23", features = ["rt-tokio-current-thread"] }
 opentelemetry-otlp = "0.16"
