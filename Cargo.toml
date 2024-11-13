@@ -37,7 +37,7 @@ lazy_static = "1.5"
 opentelemetry = "0.26"
 opentelemetry_sdk = { version = "0.26", features = ["rt-tokio-current-thread"] }
 opentelemetry-otlp = "0.26"
-tokio = { version = "1.38", features = ["macros", "sync", "rt-multi-thread"] }
+tokio = { version = "1.41", features = ["macros", "sync", "rt-multi-thread"] }
 
 [dev-dependencies]
 reqwest = { version = "0.12", features = ["json"] }
